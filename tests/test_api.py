@@ -56,3 +56,13 @@ def test_execute_sql_rejects_writes(tmp_path: Path) -> None:
     response = client.post("/api/execute-sql", json={"sql": "DELETE FROM orders"})
     assert response.status_code == 422
     assert "只读" in response.json()["detail"]
+
+
+def test_root_serves_sqlbot_page(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert "<title>SQLbot</title>" in response.text
+    assert 'id="generate-button"' in response.text
