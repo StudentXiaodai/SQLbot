@@ -2,9 +2,57 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SQLbot</title>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main>SQLbot 正在初始化。</main>
+    <main class="app-shell">
+      <header class="hero">
+        <p class="eyebrow">SQLite · Natural Language Query</p>
+        <h1>SQLbot</h1>
+        <p>用自然语言生成 SQL，确认后再执行。</p>
+      </header>
+
+      <section class="panel" aria-labelledby="settings-title">
+        <div class="section-heading">
+          <h2 id="settings-title">模型设置</h2>
+          <button id="toggle-settings" class="text-button" type="button" aria-expanded="true">收起</button>
+        </div>
+        <form id="settings-form" class="settings-grid">
+          <label>API Base URL<input id="base-url" name="baseUrl" type="url" value="https://api.openai.com/v1" required /></label>
+          <label>模型名称<input id="model" name="model" type="text" placeholder="gpt-4.1-mini" required /></label>
+          <label class="wide">API Key<input id="api-key" name="apiKey" type="password" autocomplete="off" required /></label>
+          <div class="actions wide">
+            <button type="submit">保存设置</button>
+            <button id="clear-settings" class="secondary" type="button">清除配置</button>
+          </div>
+          <p id="settings-message" class="hint wide" aria-live="polite">仅适合本机开发；不要在多人电脑或生产环境保存真实 API Key。</p>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="question-title">
+        <h2 id="question-title">提问</h2>
+        <form id="question-form">
+          <label for="question">自然语言问题</label>
+          <textarea id="question" rows="4" placeholder="例如：查询销售额最高的 5 个商品" required></textarea>
+          <div class="actions"><button id="generate-button" type="submit">生成 SQL</button></div>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="sql-title">
+        <div class="section-heading"><h2 id="sql-title">SQL 预览</h2><button id="copy-sql" class="text-button" type="button">复制 SQL</button></div>
+        <textarea id="sql" rows="8" spellcheck="false" placeholder="生成后的 SQL 会显示在这里；你可以在执行前手动编辑。"></textarea>
+        <div class="actions"><button id="execute-button" type="button" disabled>执行查询</button></div>
+      </section>
+
+      <section id="feedback" class="feedback" aria-live="polite" hidden></section>
+      <section id="results" class="panel" aria-labelledby="results-title" hidden>
+        <h2 id="results-title">查询结果</h2>
+        <p id="result-meta" class="hint"></p>
+        <div class="table-wrap"><table id="result-table"></table></div>
+      </section>
+    </main>
+    <script src="/app.js"></script>
   </body>
 </html>
